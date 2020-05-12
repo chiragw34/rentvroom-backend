@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "heroku-postbuild": "node index.js"
   },
   "author": "",
   "license": "ISC",
