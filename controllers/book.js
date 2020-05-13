@@ -16,19 +16,29 @@ exports.bookCar = async (req, res) => {
         dReturn,
         dIssue,
       };
-      const updatedCar = await Cars.findOneAndUpdate(carId, {
-        $set: { current_booking: userData, available: false },
-      });
-      await updatedCar.save();
+      // const updatedCar = await Cars.findOneAndUpdate(carId, {
+      //   $set: { current_booking: userData, available: false },
+      // });
+      // console.log(updatedCar);
+
+      Cars.findById(carId)
+        .then((car) => {
+          return Object.assign(car, {
+            current_booking: userData,
+            available: false,
+          });
+        })
+        .then((car) => {
+          return car.save();
+        });
+
       res.status(200).send({ success: true });
     } else {
       // car is not available
-      res
-        .status(404)
-        .send({
-          success: false,
-          error: { message: "not available for booking" },
-        });
+      res.status(404).send({
+        success: false,
+        error: { message: "not available for booking" },
+      });
     }
   } catch (err) {
     res.status(200).send({ success: false, error: err });
@@ -39,10 +49,21 @@ exports.bookCar = async (req, res) => {
 exports.cancelBooking = async (req, res) => {
   try {
     const carId = req.params.carId;
-    const updatedCar = await Cars.findOneAndUpdate(carId, {
-      $set: { current_booking: {}, available: true },
-    });
-    await updatedCar.save();
+    // const updatedCar = await Cars.findOneAndUpdate(carId, {
+    //   $set: { current_booking: {}, available: true },
+    // });
+    // await updatedCar.save();
+    Cars.findById(carId)
+      .then((car) => {
+        return Object.assign(car, {
+          current_booking: {},
+          available: true,
+        });
+      })
+      .then((car) => {
+        return car.save();
+      });
+
     res.status(200).send({ success: true });
   } catch (err) {
     res.status(200).send({ success: false, error: err });
