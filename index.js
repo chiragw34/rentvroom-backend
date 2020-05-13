@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const bodyParser = require("body-parser");
+const cors = require('cors')
 
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
@@ -15,6 +16,9 @@ const bookRoute = require("./routes/book");
 
 const app = express();
 app.use(bodyParser.json());
+
+// Enable CORS
+app.use(cors());
 
 // Mount Routers
 app.use("/cars", carsRoute);
